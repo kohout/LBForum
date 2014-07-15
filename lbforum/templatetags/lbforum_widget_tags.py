@@ -1,5 +1,5 @@
 from django.template import Library
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from lbforum.models import Topic, Category, Post
 
@@ -15,6 +15,7 @@ def lbf_categories_and_forums(forum=None, template='lbforum/widgets/categories_a
 
 @register.inclusion_tag('lbforum/tags/dummy.html')
 def lbf_status(template='lbforum/widgets/lbf_status.html'):
+    User = get_user_model()
     return {'template': template,
             'total_topics': Topic.objects.count(),
             'total_posts': Post.objects.count(),

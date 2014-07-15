@@ -4,7 +4,6 @@ from base64 import b64encode, b64decode
 import pickle
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Sum
@@ -12,6 +11,7 @@ from django.conf import settings
 
 from attachments.models import Attachment
 from onlineuser.models import Online
+from django.conf import settings
 
 
 class Config(models.Model):
@@ -109,7 +109,7 @@ class Topic(models.Model):
     forum = models.ForeignKey(Forum, verbose_name=_('Forum'))
     topic_type = models.ForeignKey(TopicType, verbose_name=_('Topic Type'),
             blank=True, null=True)
-    posted_by = models.ForeignKey(User)
+    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     #TODO ADD TOPIC POST.
     post = models.ForeignKey('Post', verbose_name=_('Post'),
@@ -177,7 +177,7 @@ FORMAT_CHOICES = (
 
 class Post(models.Model):
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'), related_name='posts')
-    posted_by = models.ForeignKey(User)
+    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     poster_ip = models.IPAddressField()
     topic_post = models.BooleanField(default=False)
 
@@ -246,7 +246,8 @@ class Post(models.Model):
 
 
 class LBForumUserProfile(models.Model):
-    user = models.OneToOneField(User, related_name='lbforum_profile',
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                related_name='lbforum_profile',
                                 verbose_name=_('User'))
     last_activity = models.DateTimeField(auto_now_add=True)
     userrank = models.CharField(max_length=30, default="Junior Member")
@@ -310,7 +311,7 @@ def update_user_last_activity(sender, instance, created, **kwargs):
         p.last_activity = instance.updated_on
         p.save()
 
-post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_user_profile, sender=settings.AUTH_USER_MODEL)
 post_save.connect(update_topic_on_post, sender=Post)
 post_save.connect(update_forum_on_post, sender=Post)
 post_save.connect(update_forum_on_topic, sender=Topic)

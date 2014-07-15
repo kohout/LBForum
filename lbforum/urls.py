@@ -34,7 +34,7 @@ post_patterns = patterns(
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.index, name='lbforum_index'),
+    url(r'^forum/$', views.index, name='lbforum_index'),
     url(r'^recent/$', views.recent, name='lbforum_recent'),
     (r'^forum/', include(forum_patterns)),
     (r'^topic/', include(topic_patterns)),
