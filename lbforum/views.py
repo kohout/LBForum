@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext
 from django.core.urlresolvers import reverse
@@ -155,9 +155,9 @@ def edit_post(request, post_id, form_class=EditPostForm,
 
 
 @login_required
-def user_topics(request, user_id,
+def user_topics(request, username,
                 template_name='lbforum/account/user_topics.html'):
-    view_user = User.objects.get(pk=user_id)
+    view_user = get_user_model().objects.get(username=username)
     topics = view_user.topic_set.order_by('-created_on').select_related()
     context = {
         'topics': topics,
@@ -169,9 +169,9 @@ def user_topics(request, user_id,
 
 
 @login_required
-def user_posts(request, user_id,
+def user_posts(request, username,
                template_name='lbforum/account/user_posts.html'):
-    view_user = User.objects.get(pk=user_id)
+    view_user = get_user_model().objects.get(pk=username)
     posts = view_user.post_set.order_by('-created_on').select_related()
     context = {
         'posts': posts,
