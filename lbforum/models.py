@@ -12,6 +12,7 @@ from django.conf import settings
 from attachments.models import Attachment
 from onlineuser.models import Online
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 
 
 class Config(models.Model):
@@ -25,6 +26,26 @@ class Category(models.Model):
     ordering = models.PositiveIntegerField(default=1)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(blank=True, null=True)
+
+    def can_delete(self):
+        return self.forum_set.count() == 0
+
+    def row_buttons(self):
+        _can_delete = self.can_delete()
+        return [
+            {'url': reverse_lazy('admin-category-update',
+                    kwargs={'pk': self.id }),
+             'css': 'btn-info',
+             'icon': 'glyphicon glyphicon-pencil',
+             'label': 'Edit category',
+            },
+            {'url': reverse_lazy('admin-category-delete',
+                    kwargs={'pk': self.id }) if _can_delete else '#',
+              'css': 'btn-danger' if _can_delete else 'btn-danger disabled',
+              'icon': 'glyphicon glyphicon-remove',
+              'label': 'Delete category',
+            }
+        ]
 
     class Meta:
         verbose_name = _("Category")
@@ -47,6 +68,26 @@ class Forum(models.Model):
     num_posts = models.IntegerField(default=0)
 
     last_post = models.CharField(max_length=255, blank=True)  # pickle obj
+
+    def can_delete(self):
+        return self.topic_set.count() == 0
+
+    def row_buttons(self):
+        _can_delete = self.can_delete()
+        return [
+            {'url': reverse_lazy('admin-forum-update',
+                    kwargs={'pk': self.id }),
+             'css': 'btn-info',
+             'icon': 'glyphicon glyphicon-pencil',
+             'label': 'Edit forum',
+            },
+            {'url': reverse_lazy('admin-forum-delete',
+                    kwargs={'pk': self.id }) if _can_delete else '#',
+              'css': 'btn-danger' if _can_delete else 'btn-danger disabled',
+              'icon': 'glyphicon glyphicon-remove',
+              'label': 'Delete forum',
+            }
+        ]
 
     class Meta:
         verbose_name = _("Forum")
@@ -90,6 +131,26 @@ class TopicType(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
     description = models.TextField(blank=True, default='')
+
+    def can_delete(self):
+        return self.topic_set.count() == 0
+
+    def row_buttons(self):
+        _can_delete = self.can_delete()
+        return [
+            {'url': reverse_lazy('admin-topictype-update',
+                    kwargs={'pk': self.id }),
+             'css': 'btn-info',
+             'icon': 'glyphicon glyphicon-pencil',
+             'label': 'Edit topic type',
+            },
+            {'url': reverse_lazy('admin-topictype-delete',
+                    kwargs={'pk': self.id }) if _can_delete else '#',
+              'css': 'btn-danger' if _can_delete else 'btn-danger disabled',
+              'icon': 'glyphicon glyphicon-remove',
+              'label': 'Delete topic type',
+            }
+        ]
 
     def __unicode__(self):
         return self.name

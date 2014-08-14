@@ -41,9 +41,9 @@ urlpatterns = patterns(
     url('^reply/new/(?P<topic_id>\d+)/$', views.new_post,
         name='lbforum_new_replay'),
     (r'^post/', include(post_patterns)),
-    url('^user/(?P<username>[\w-]+)/topics/$', views.user_topics,
+    url('^user/(?P<username>[ \w-]+)/topics/$', views.user_topics,
         name='lbforum_user_topics'),
-    url('^user/(?P<username>[\w-]+)/posts/$', views.user_posts,
+    url('^user/(?P<username>[ \w-]+)/posts/$', views.user_posts,
         name='lbforum_user_posts'),
     url(r'^lang.js$', TemplateView.as_view(template_name='lbforum/lang.js'),
         name='lbforum_lang_js'),
@@ -57,7 +57,7 @@ urlpatterns += patterns(
         name='lbforum_account_index'),
     url(r'^account/signature/$', accountviews.signature,
         name='lbforum_signature'),
-    url(r'^user/(?P<username>[\w-]+)/$', login_required(accountviews.profile),
+    url(r'^user/(?P<username>[ \w-]+)/$', login_required(accountviews.profile),
         name='lbforum_user_profile'),
 )
 
