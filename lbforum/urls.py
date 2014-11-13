@@ -15,19 +15,23 @@ forum_patterns = patterns(
 
 topic_patterns = patterns(
     '',
-    url('^(?P<topic_id>\d+)/$', views.topic, name='lbforum_topic'),
+    url('^(?P<topic_id>\d+)/$', views.topic,
+        name='lbforum_topic'),
     url('^(?P<topic_id>\d+)/delete/$', views.delete_topic,
         name='lbforum_delete_topic'),
     url('^(?P<topic_id>\d+)/update_topic_attr_as_not/(?P<attr>[\w-]+)/$',
         views.update_topic_attr_as_not,
         name='lbforum_update_topic_attr_as_not'),
-    url('^new/(?P<forum_id>\d+)/$', views.new_post, name='lbforum_new_topic'),
+    url('^new/(?P<forum_id>\d+)/$', views.new_post,
+        name='lbforum_new_topic'),
 )
 
 post_patterns = patterns(
     '',
-    url('^(?P<post_id>\d+)/$', views.post, name='lbforum_post'),
-    url('^(?P<post_id>\d+)/edit/$', views.edit_post, name='lbforum_post_edit'),
+    url('^(?P<post_id>\d+)/$', views.post,
+        name='lbforum_post'),
+    url('^(?P<post_id>\d+)/edit/$', views.edit_post,
+        name='lbforum_post_edit'),
     url('^(?P<post_id>\d+)/delete/$', views.delete_post,
         name='lbforum_post_delete'),
 )
