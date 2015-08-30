@@ -19,6 +19,9 @@ class Config(models.Model):
     key = models.CharField(max_length=255)  # PK
     value = models.CharField(max_length=255)
 
+    class Meta:
+        app_label = 'lbforum'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -51,6 +54,7 @@ class Category(models.Model):
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
         ordering = ('-ordering', 'created_on')
+        app_label = 'lbforum'
 
     def __unicode__(self):
         return self.name
@@ -93,6 +97,7 @@ class Forum(models.Model):
         verbose_name = _("Forum")
         verbose_name_plural = _("Forums")
         ordering = ('ordering', '-created_on')
+        app_label = 'lbforum'
 
     def _count_nums_topic(self):
         return self.topic_set.all().count()
@@ -155,6 +160,8 @@ class TopicType(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        app_label = 'lbforum'
 
 class TopicManager(models.Manager):
     def get_query_set(self):
@@ -201,6 +208,7 @@ class Topic(models.Model):
         get_latest_by = ('created_on')
         verbose_name = _("Topic")
         verbose_name_plural = _("Topics")
+        app_label = 'lbforum'
 
     def __unicode__(self):
         return self.subject
@@ -239,7 +247,7 @@ FORMAT_CHOICES = (
 class Post(models.Model):
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'), related_name='posts')
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL)
-    poster_ip = models.IPAddressField()
+    poster_ip = models.GenericIPAddressField()
     topic_post = models.BooleanField(default=False)
 
     format = models.CharField(max_length=20, default='bbcode')  # user name
@@ -258,6 +266,7 @@ class Post(models.Model):
         verbose_name_plural = _("Posts")
         ordering = ('-created_on',)
         get_latest_by = ('created_on', )
+        app_label = 'lbforum'
 
     def __unicode__(self):
         return self.message[:80]
@@ -323,6 +332,9 @@ class LBForumUserProfile(models.Model):
 
     def get_absolute_url(self):
         return self.user.get_absolute_url()
+
+    class Meta:
+        app_label = 'lbforum'
 
 
 #### do smoe connect ###
