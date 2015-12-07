@@ -61,7 +61,7 @@ urlpatterns += patterns(
         name='lbforum_account_index'),
     url(r'^account/signature/$', accountviews.signature,
         name='lbforum_signature'),
-    url(r'^user/(?P<username>[ \w-]+)/$', login_required(accountviews.profile),
+    url(r'^user/(?P<username>[ \w@\d.-]+)/$', login_required(accountviews.profile),
         name='lbforum_user_profile'),
 )
 
